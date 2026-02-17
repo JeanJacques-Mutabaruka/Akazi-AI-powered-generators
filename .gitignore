@@ -1,0 +1,83 @@
+# ============================================================
+# AKAZI Generator - .gitignore
+# ============================================================
+
+# ── Virtual environments ──────────────────────────────────
+venv_akazi/
+venv/
+.venv/
+env/
+ENV/
+
+# ── Dossiers à ignorer partout (old + examples) ───────────
+**/old/
+**/Old/
+**/OLD/
+**/example/
+**/Example/
+**/examples/
+**/Examples/
+
+# ── Python cache ──────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+.Python
+
+# ── Fichiers générés (output) ─────────────────────────────
+output/
+*.docx
+*.pdf
+*.pptx
+
+# ── Logs ──────────────────────────────────────────────────
+logs/
+*.log
+log/
+
+# ── Archives ──────────────────────────────────────────────
+*.zip
+*.tar.gz
+*.rar
+
+# ── Scripts Windows ───────────────────────────────────────
+*.bat
+*.cmd
+
+# ── Documentation interne (garder README.md uniquement) ───
+ARCHITECTURE.md
+CHANGELOG.md
+GUIDE_FINAL_DEPLOIEMENT_COMPLET.md
+INSTALLATION_GUIDE.md
+PHASE2_COMPLETE.md
+PROCHAINES_ETAPES.md
+PROJECT_STRUCTURE.txt
+QUICKSTART.md
+RAPPORT_FINAL_FORMAT_CV.md
+SUMMARY.md
+
+# ── Fichiers de config locaux ─────────────────────────────
+.env
+.env.local
+*.env
+
+# ── IDE ───────────────────────────────────────────────────
+.vscode/
+.idea/
+*.code-workspace
+
+# ── OS ────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Streamlit cache ───────────────────────────────────────
+.streamlit/secrets.toml
+
+# ── Fichiers de copie/backup ──────────────────────────────
+*- Kopie*
+*- Copy*
+*_backup*
+*_old*

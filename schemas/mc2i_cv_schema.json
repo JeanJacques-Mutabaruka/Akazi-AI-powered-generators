@@ -1,0 +1,255 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://akazi.io/schemas/cv_mc2i.json",
+  "title": "MC2I CV Schema (Dossier de Compétences)",
+  "description": "Schema for MC2I professional competency dossier format",
+  "type": "object",
+  "required": ["personal_info", "summary", "experiences"],
+  "properties": {
+    "personal_info": {
+      "type": "object",
+      "required": ["full_name", "title"],
+      "properties": {
+        "full_name": {
+          "type": "string",
+          "minLength": 2,
+          "examples": ["Benjamin Dupuy"]
+        },
+        "title": {
+          "type": "string",
+          "description": "Professional expertise title",
+          "examples": ["Expert Analyse et Migration Data"]
+        },
+        "years_experience": {
+          "type": "integer",
+          "description": "Total years of experience",
+          "minimum": 0,
+          "maximum": 70
+        },
+        "contact": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "format": "email"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "description": "4-paragraph introductory text (CRITICAL for MC2I format)",
+      "required": ["experience_summary", "technical_skills", "functional_skills", "conclusion"],
+      "properties": {
+        "experience_summary": {
+          "type": "string",
+          "description": "Paragraph 1: Brief professional background (35-50 words / 200-300 chars)",
+          "minLength": 200,
+          "maxLength": 300
+        },
+        "technical_skills": {
+          "type": "string",
+          "description": "Paragraph 2: Detailed technical competencies (100-120 words / 600-850 chars)",
+          "minLength": 600,
+          "maxLength": 850
+        },
+        "functional_skills": {
+          "type": "string",
+          "description": "Paragraph 3: Functional domain expertise (35-50 words / 200-300 chars)",
+          "minLength": 200,
+          "maxLength": 300
+        },
+        "conclusion": {
+          "type": "string",
+          "description": "Paragraph 4: Conclusion with template format",
+          "pattern": ".*\\[DOMAINE PRINCIPAL\\].*",
+          "examples": [
+            "La richesse des missions du consultant, qui est passé par plusieurs domaines fonctionnels, en utilisant des outils de plusieurs constructeurs / éditeurs, permet d'apporter l'expertise nécessaire pour la bonne réalisation de projets dans le domaine [DOMAINE PRINCIPAL]."
+          ]
+        }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "description": "Languages with proficiency",
+      "items": {
+        "type": "object",
+        "required": ["language", "level"],
+        "properties": {
+          "language": {
+            "type": "string",
+            "examples": ["Français", "Anglais"]
+          },
+          "level": {
+            "type": "string",
+            "examples": ["Langue maternelle", "Courant", "Professionnel"]
+          }
+        }
+      }
+    },
+    "experience_summary_list": {
+      "type": "array",
+      "description": "Synthèse des expériences (Company - Position - Duration in months)",
+      "items": {
+        "type": "object",
+        "required": ["company", "position", "duration_months"],
+        "properties": {
+          "company": {
+            "type": "string"
+          },
+          "position": {
+            "type": "string"
+          },
+          "duration_months": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "description": "Formation (Degree at Institution; Year)",
+      "items": {
+        "type": "object",
+        "required": ["degree", "year"],
+        "properties": {
+          "degree": {
+            "type": "string",
+            "examples": ["Master IT"]
+          },
+          "institution": {
+            "type": "string",
+            "examples": ["Université d'Aberdeen (Ecosse)"]
+          },
+          "year": {
+            "type": "integer"
+          },
+          "certification": {
+            "type": "boolean",
+            "description": "True if certification, false if degree",
+            "default": false
+          }
+        }
+      }
+    },
+    "expertise": {
+      "type": "object",
+      "description": "Expertises, Outils et Technologies (2 sub-sections)",
+      "required": ["expertises", "maitrises"],
+      "properties": {
+        "expertises": {
+          "type": "array",
+          "description": "Areas of expertise",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["Talend DI", "SQL, PLSQL, TSQL", "Migration de données"]]
+        },
+        "maitrises": {
+          "type": "array",
+          "description": "Tools and technologies mastered",
+          "items": {
+            "type": "string"
+          },
+          "examples": [["Oracle, MySQL, SQL Server", "Google Cloud, AWS", "Power BI"]]
+        }
+      }
+    },
+    "experiences": {
+      "type": "array",
+      "description": "Detailed professional experiences (reverse chronological)",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["company", "position", "period", "activities"],
+        "properties": {
+          "company": {
+            "type": "string",
+            "description": "Company name (ALL CAPS in output, color #DD0061)"
+          },
+          "position": {
+            "type": "string",
+            "description": "Position title (Small Caps in output, color #006A9E)"
+          },
+          "period": {
+            "type": "object",
+            "description": "Time period",
+            "required": ["start"],
+            "properties": {
+              "start": {
+                "type": "string",
+                "description": "Start date (MMMM YYYY format)",
+                "pattern": "^[A-Za-zÀ-ÿ]+ \\d{4}$",
+                "examples": ["Juillet 2023", "January 2020"]
+              },
+              "end": {
+                "type": ["string", "null"],
+                "description": "End date or 'En cours' / 'Present'",
+                "examples": ["Décembre 2024", "En cours", "Present"]
+              }
+            }
+          },
+          "context": {
+            "type": "string",
+            "description": "Brief mission context (color #575856, 10pt)"
+          },
+          "activities": {
+            "type": "array",
+            "description": "List of ALL activities (NEVER omit any)",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          },
+          "functional_domains": {
+            "type": "array",
+            "description": "Business sectors/domains (deduce if not explicit)",
+            "items": {
+              "type": "string"
+            },
+            "examples": [["Services financiers"], ["Santé / Beauté"]]
+          },
+          "technical_environment": {
+            "type": "array",
+            "description": "Technologies used (group by affinity)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "text": {
+                  "type": "string",
+                  "description": "Technology stack (grouped)",
+                  "examples": ["Talend DI TIS v7, Nexus OSS 3.19.1, SQLSERVER 2019"]
+                },
+                "inferred": {
+                  "type": "boolean",
+                  "description": "If true, display in ORANGE #FF8C00 (not explicitly listed in CV)",
+                  "default": false
+                }
+              },
+              "required": ["text"]
+            }
+          }
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "format_version": {
+          "type": "string",
+          "default": "MC2I-2026"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

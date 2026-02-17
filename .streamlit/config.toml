@@ -1,0 +1,39 @@
+[server]
+# Server configuration
+port = 8501
+headless = true
+enableCORS = false
+enableXsrfProtection = true
+
+# File upload settings
+maxUploadSize = 200  # MB
+maxMessageSize = 200  # MB
+
+[browser]
+# Browser settings
+gatherUsageStats = false
+serverAddress = "localhost"
+serverPort = 8501
+
+[theme]
+# Custom AKAZI theme
+primaryColor = "#DD0061"  # Pink/Red (from MC2I)
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F5F5F5"
+textColor = "#262730"
+font = "sans serif"
+
+[runner]
+# Performance optimization
+magicEnabled = true
+fastReruns = true
+
+[client]
+# Client settings
+showErrorDetails = true
+toolbarMode = "minimal"
+
+[logger]
+# Logging configuration
+level = "info"
+messageFormat = "%(asctime)s - %(levelname)s - %(message)s"

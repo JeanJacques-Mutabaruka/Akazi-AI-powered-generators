@@ -1,0 +1,129 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://akazi.io/schemas/jobdesc.json",
+  "title": "AKAZI Job Description Schema",
+  "description": "Schema for AKAZI job posting format (EN/FR)",
+  "type": "object",
+  "required": ["mission_title", "budget", "description"],
+  "properties": {
+    "mission_title": {
+      "type": "string",
+      "description": "Title of the mission/position",
+      "minLength": 5,
+      "maxLength": 200,
+      "examples": ["Senior Full-Stack Developer", "Chef de Projet Digital"]
+    },
+    "budget": {
+      "type": "string",
+      "description": "Budget information (always displayed in RED)",
+      "pattern": "^.*$",
+      "examples": [
+        "USD 5,000 - 7,000 per month",
+        "5 000 - 7 000 USD par mois"
+      ]
+    },
+    "description": {
+      "type": "object",
+      "description": "Main content organized in sections",
+      "required": ["sections"],
+      "properties": {
+        "intro": {
+          "type": "string",
+          "description": "Optional introductory paragraph",
+          "examples": ["For our client in the technology sector based in Rwanda..."]
+        },
+        "sections": {
+          "type": "array",
+          "description": "List of content sections",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["title", "content"],
+            "properties": {
+              "title": {
+                "type": "string",
+                "description": "Section title (e.g., 'Responsibilities', 'Requirements')",
+                "minLength": 1,
+                "maxLength": 100
+              },
+              "content": {
+                "type": "array",
+                "description": "List of items (bullet points)",
+                "minItems": 1,
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "string",
+                      "description": "Simple bullet point text"
+                    },
+                    {
+                      "type": "object",
+                      "description": "Nested bullet point with sub-items",
+                      "required": ["text"],
+                      "properties": {
+                        "text": {
+                          "type": "string",
+                          "description": "Main bullet point text"
+                        },
+                        "sub_items": {
+                          "type": "array",
+                          "description": "Sub-bullets (level 2)",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "inferred": {
+                          "type": "boolean",
+                          "description": "If true, display in ORANGE (deduced information)",
+                          "default": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              },
+              "inferred": {
+                "type": "boolean",
+                "description": "If true, entire section is deduced (ORANGE)",
+                "default": false
+              }
+            }
+          }
+        },
+        "footer": {
+          "type": "string",
+          "description": "Optional closing paragraph",
+          "examples": ["We look forward to your application."]
+        }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional metadata",
+      "properties": {
+        "language": {
+          "type": "string",
+          "enum": ["en", "fr"],
+          "description": "Document language",
+          "default": "en"
+        },
+        "company_sector": {
+          "type": "string",
+          "description": "Industry/sector (used for anonymization)",
+          "examples": ["technology", "finance", "healthcare"]
+        },
+        "location": {
+          "type": "string",
+          "description": "Job location",
+          "examples": ["Kigali, Rwanda", "Remote"]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Creation timestamp"
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

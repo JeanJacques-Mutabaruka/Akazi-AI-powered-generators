@@ -1,0 +1,52 @@
+# ============================================
+# AKAZI Generator - Python Dependencies
+# ============================================
+
+# Core Streamlit
+streamlit==1.31.0
+
+# Document Generation
+python-docx==1.1.2
+
+# Data Processing
+pandas==2.2.0
+PyYAML==6.0.1
+
+# Validation
+jsonschema==4.21.0
+
+# Logging
+structlog==24.1.0
+
+# Performance Monitoring
+psutil==5.9.8
+
+# Visualization (for dashboard)
+plotly==5.18.0
+
+# Optional: Enhanced Streamlit UI
+streamlit-extras==0.3.6
+
+# Development Tools (optional)
+pytest==8.0.0
+pytest-cov==4.1.0
+black==24.1.1
+flake8==7.0.0
+
+# ============================================
+# Installation Instructions
+# ============================================
+# 
+# 1. Create virtual environment:
+#    python -m venv venv_akazi
+#
+# 2. Activate:
+#    Windows: venv_akazi\Scripts\activate
+#    Mac/Linux: source venv_akazi/bin/activate
+#
+# 3. Install dependencies:
+#    pip install -r requirements.txt
+#
+# 4. Run application:
+#    streamlit run streamlit_app.py
+#
