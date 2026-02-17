@@ -6,10 +6,15 @@ Advanced settings and configuration options (optional).
 import streamlit as st
 from pathlib import Path
 
-from config.base_config import BaseConfig
-from config.akazi_jobdesc_config import AkaziJobDescConfig
-from config.akazi_cv_config import AkaziCVConfig
-from config.mc2i_cv_config import MC2ICVConfig
+# Imports config avec fallback propre si non disponibles
+try:
+    from config.base_config import BaseConfig
+    from config.akazi_jobdesc_config import AkaziJobDescConfig
+    from config.akazi_cv_config import AkaziCVConfig
+    from config.mc2i_cv_config import MC2ICVConfig
+    CONFIGS_AVAILABLE = True
+except Exception:
+    CONFIGS_AVAILABLE = False
 
 st.set_page_config(page_title="Configuration", page_icon="⚙️", layout="wide")
 
@@ -20,7 +25,7 @@ def main():
     st.markdown("---")
     
     # Tabs for different config sections
-    tab1, tab2, tab3 = st.tabs(["🎨 Apparence", "📝 Formats", "💾 Stockage"])
+    tab1, tab2, tab3, tab4 = st.tabs(["🎨 Apparence", "📝 Formats", "💾 Stockage", "📋 Prompts"])
     
     with tab1:
         display_appearance_settings()
@@ -30,6 +35,9 @@ def main():
     
     with tab3:
         display_storage_settings()
+
+    with tab4:
+        display_prompts()
 
 
 def display_appearance_settings():
@@ -114,62 +122,118 @@ def display_format_settings():
 
 
 def display_akazi_jobdesc_config():
-    """Display AKAZI Job Description configuration."""
+    """Display AKAZI Job Description configuration — version statique robuste."""
     st.markdown("### 📄 Configuration AKAZI Job Description")
-    
-    config = AkaziJobDescConfig()
-    
+
     col1, col2 = st.columns(2)
-    
+
     with col1:
-        st.markdown("**Polices**")
-        st.text(f"Police principale: {config.fonts['main']['name']}")
-        st.text(f"Taille corps: {config.fonts['main']['size_body']} pt")
-        st.text(f"Taille titres: {config.fonts['main']['size_title']} pt")
-    
+        st.markdown("**🔤 Polices**")
+        st.markdown("""
+| Élément | Valeur |
+|---------|--------|
+| Police principale | Century Gothic |
+| Taille corps | 10 pt |
+| Taille titres sections | 12 pt |
+| Taille titre principal | 14 pt |
+""")
+
     with col2:
-        st.markdown("**Couleurs**")
-        st.text(f"Noir: #{config.colors['black']}")
-        st.text(f"Rouge: #{config.colors['red']}")
-        st.text(f"Orange: #{config.colors['orange']}")
-    
-    st.info("ℹ️ Les configurations sont définies dans `/config/akazi_jobdesc_config.py`")
+        st.markdown("**🎨 Couleurs**")
+        st.markdown("""
+| Élément | Code couleur |
+|---------|-------------|
+| Titre principal | 🔴 `#C00000` |
+| Budget | 🔴 `#C00000` |
+| Texte standard | ⚫ `#000000` |
+| Éléments inférés | 🟠 `#FF8C00` |
+""")
+
+    st.markdown("**📐 Mise en page**")
+    st.markdown("""
+| Paramètre | Valeur |
+|-----------|--------|
+| Marges | 2.54 cm (toutes) |
+| Interligne | 1.15 |
+| Espace avant titre section | 20 pt |
+| Espace après titre section | 6 pt |
+| Indentation bullet niveau 1 | 1.0 cm (hanging 0.5 cm) |
+| Indentation bullet niveau 2 | 1.5 cm (hanging 0.5 cm) |
+""")
+    st.info("ℹ️ Configuration définie dans `config/akazi_jobdesc_config.py`")
 
 
 def display_akazi_cv_config():
     """Display AKAZI CV configuration."""
     st.markdown("### 📋 Configuration AKAZI CV")
-    
-    st.info("📌 Le format AKAZI CV utilise des spécifications strictes définies dans le prompt de transformation V3")
-    
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("**🔤 Polices**")
+        st.markdown("""
+| Élément | Valeur |
+|---------|--------|
+| Police principale | Century Gothic |
+| Taille corps | 9 pt |
+| Taille en-tête | 11 pt |
+""")
+
+    with col2:
+        st.markdown("**🎨 Couleurs**")
+        st.markdown("""
+| Élément | Code couleur |
+|---------|-------------|
+| En-tête nom | 🔴 `#C00000` |
+| Sous-titres | 🔵 `#002060` |
+| Email | 🟡 `#CC9900` |
+""")
+
+    st.markdown("**📐 Mise en page**")
     st.markdown("""
-    **Spécifications AKAZI CV:**
-    - Police: Century Gothic 9pt (corps), 11pt (en-tête)
-    - Couleur rouge: #C00000 (en-tête)
-    - Couleur bleue: #002060 (sous-titres)
-    - Couleur or: #CC9900 (email)
-    - Tableaux avec colonnes 21% / 79%
-    - Bordures visibles
-    """)
+| Paramètre | Valeur |
+|-----------|--------|
+| Tableau | 2 colonnes : 21% / 79% |
+| Bordures | Visibles |
+""")
+    st.info("ℹ️ Configuration définie dans `config/akazi_cv_config.py`")
 
 
 def display_mc2i_cv_config():
     """Display MC2I CV configuration."""
     st.markdown("### 📊 Configuration MC2I CV")
-    
-    st.info("📌 Le format MC2I utilise les spécifications du prompt de transformation MC2I")
-    
-    st.markdown("""
-    **Spécifications MC2I:**
-    - Police: Lato 10pt (corps), 14pt (titres entreprise/mission)
-    - Couleur entreprise: #DD0061 (Small Caps)
-    - Couleur mission: #006A9E (Small Caps)
-    - Couleur texte: #575856
-    - Séparateurs horizontaux entre sections
-    - 4 paragraphes introductifs
-    - Expériences détaillées avec activités et environnement technique
-    """)
 
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.markdown("**🔤 Polices**")
+        st.markdown("""
+| Élément | Valeur |
+|---------|--------|
+| Police principale | Lato |
+| Taille corps | 10 pt |
+| Taille titres mission | 14 pt |
+""")
+
+    with col2:
+        st.markdown("**🎨 Couleurs**")
+        st.markdown("""
+| Élément | Code couleur |
+|---------|-------------|
+| Entreprise | 🩷 `#DD0061` |
+| Mission | 🔵 `#006A9E` |
+| Texte | ⬛ `#575856` |
+""")
+
+    st.markdown("**📐 Structure**")
+    st.markdown("""
+| Paramètre | Valeur |
+|-----------|--------|
+| Style titres | Small Caps |
+| Séparateurs | Horizontaux entre sections |
+| Intro | 4 paragraphes |
+""")
+    st.info("ℹ️ Configuration définie dans `config/mc2i_cv_config.py`")
 
 def display_storage_settings():
     """Display storage and cache settings."""
@@ -232,6 +296,201 @@ def display_storage_settings():
         st.session_state['cache_enabled'] = cache_enabled
         
         st.success("✅ Configuration sauvegardée avec succès !")
+
+
+
+# ============================================================
+# PROMPTS TAB
+# ============================================================
+
+# Mapping: nom affiché → fichier .md dans config/
+PROMPTS_CATALOG = {
+    "📄 AKAZI Job Description (FR)": {
+        "file": "AKAZI_Job_Description_Generator_Prompt_V1-1__V2026-02-17.md",
+        "description": "Prompt pour générer des fiches de poste AKAZI en français",
+        "format_code": "JD-AKAZI-FR",
+        "lang": "🇫🇷 Français",
+    },
+    "📄 AKAZI Job Description (EN)": {
+        "file": "AKAZI_Job_Description_Generator_Prompt_V1-1__V2026-02-17.md",
+        "description": "Prompt for generating AKAZI job descriptions in English",
+        "format_code": "JD-AKAZI-EN",
+        "lang": "🇬🇧 English",
+    },
+    "📋 AKAZI CV": {
+        "file": "AKAZI_CV_Generator_Prompt_V1.md",
+        "description": "Prompt pour générer des CVs au format AKAZI",
+        "format_code": "CV-AKAZI",
+        "lang": "🇫🇷 Français",
+    },
+    "📊 MC2I CV": {
+        "file": "MC2I_CV_Generator_Prompt_V1.md",
+        "description": "Prompt pour générer des CVs au format MC2I",
+        "format_code": "CV-MC2I",
+        "lang": "🇫🇷 Français",
+    },
+}
+
+
+def _load_prompt_file(filename: str) -> str | None:
+    """Charge le contenu d'un fichier prompt depuis config/"""
+    config_dir = Path(__file__).parent.parent / "config"
+    filepath = config_dir / filename
+    if filepath.exists():
+        return filepath.read_text(encoding="utf-8")
+    return None
+
+
+def _convert_md_to_pdf_bytes(md_content: str, title: str) -> bytes:
+    """
+    Convertit du Markdown en PDF via HTML → bytes.
+    Utilise uniquement des modules stdlib + disponibles sur Streamlit Cloud.
+    """
+    try:
+        import markdown as md_lib
+        html_body = md_lib.markdown(
+            md_content,
+            extensions=["tables", "fenced_code", "nl2br"]
+        )
+    except ImportError:
+        # Fallback minimal si markdown non installé
+        html_body = f"<pre>{md_content}</pre>"
+
+    html = f"""<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>{title}</title>
+  <style>
+    body {{ font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px;
+           line-height: 1.6; margin: 40px; color: #222; }}
+    h1 {{ color: #002060; border-bottom: 2px solid #667eea; padding-bottom: 8px; }}
+    h2 {{ color: #002060; margin-top: 24px; }}
+    h3 {{ color: #444; }}
+    code {{ background: #f4f4f4; padding: 2px 6px; border-radius: 4px;
+            font-family: Consolas, monospace; font-size: 11px; }}
+    pre  {{ background: #f4f4f4; padding: 12px; border-radius: 6px;
+            overflow-x: auto; font-size: 11px; }}
+    table {{ border-collapse: collapse; width: 100%; margin: 12px 0; }}
+    th, td {{ border: 1px solid #ccc; padding: 6px 10px; text-align: left; }}
+    th {{ background: #667eea; color: white; }}
+    blockquote {{ border-left: 4px solid #667eea; margin: 0;
+                  padding-left: 16px; color: #555; }}
+    .header {{ background: linear-gradient(135deg, #667eea, #764ba2);
+               color: white; padding: 20px; border-radius: 8px;
+               margin-bottom: 24px; }}
+  </style>
+</head>
+<body>
+  <div class="header"><h1 style="color:white; border:none;">{title}</h1>
+  <p style="margin:0; opacity:0.85;">AKAZI Generator — Prompt de génération</p></div>
+  {html_body}
+</body>
+</html>"""
+
+    try:
+        from weasyprint import HTML
+        pdf_bytes = HTML(string=html).write_pdf()
+        return pdf_bytes
+    except ImportError:
+        # weasyprint non disponible → retourner l'HTML encodé en bytes
+        return html.encode("utf-8")
+
+
+def display_prompts():
+    """Onglet Prompts : aperçu + téléchargement MD et PDF"""
+
+    st.subheader("📋 Prompts de génération")
+    st.markdown(
+        "Ces prompts sont à utiliser avec votre IA (Claude, GPT-4…) pour convertir "
+        "un document source (CV, fiche de poste PDF) en fichier **JSON/YAML** "
+        "prêt à être injecté dans le générateur."
+    )
+
+    st.markdown("---")
+
+    # ── Sélecteur de prompt ──────────────────────────────────────────────────
+    selected_name = st.selectbox(
+        "Sélectionnez un prompt",
+        options=list(PROMPTS_CATALOG.keys()),
+        index=0
+    )
+
+    prompt_info = PROMPTS_CATALOG[selected_name]
+    md_content = _load_prompt_file(prompt_info["file"])
+
+    # ── Métadonnées ──────────────────────────────────────────────────────────
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown(f"**Format** : `{prompt_info['format_code']}`")
+    with col2:
+        st.markdown(f"**Langue** : {prompt_info['lang']}")
+    with col3:
+        st.markdown(f"**Fichier** : `{prompt_info['file']}`")
+
+    st.markdown(f"_{prompt_info['description']}_")
+    st.markdown("---")
+
+    if md_content is None:
+        st.error(
+            f"❌ Fichier introuvable : `config/{prompt_info['file']}`\n\n"
+            "Vérifiez que le fichier existe dans le dossier `config/`."
+        )
+        return
+
+    # ── Boutons de téléchargement ────────────────────────────────────────────
+    stem = Path(prompt_info["file"]).stem
+    col_dl1, col_dl2, col_dl3 = st.columns([1, 1, 3])
+
+    with col_dl1:
+        st.download_button(
+            label="⬇️ Télécharger .md",
+            data=md_content.encode("utf-8"),
+            file_name=f"{stem}.md",
+            mime="text/markdown",
+            use_container_width=True,
+            key=f"dl_md_{stem}"
+        )
+
+    with col_dl2:
+        # Générer PDF à la volée
+        pdf_or_html = _convert_md_to_pdf_bytes(md_content, selected_name)
+        is_pdf = pdf_or_html[:4] == b"%PDF"
+        st.download_button(
+            label="⬇️ Télécharger PDF" if is_pdf else "⬇️ Télécharger HTML",
+            data=pdf_or_html,
+            file_name=f"{stem}.{'pdf' if is_pdf else 'html'}",
+            mime="application/pdf" if is_pdf else "text/html",
+            use_container_width=True,
+            key=f"dl_pdf_{stem}"
+        )
+
+    # ── Aperçu Markdown ──────────────────────────────────────────────────────
+    st.markdown("### 👁️ Aperçu du prompt")
+
+    with st.expander("Afficher / Masquer le prompt complet", expanded=True):
+        st.markdown(
+            f"""
+            <div style="background:#f8f9ff; border:1px solid #dde3ff;
+                        border-radius:8px; padding:20px; max-height:600px;
+                        overflow-y:auto; font-family: 'Segoe UI', sans-serif;
+                        font-size:14px; line-height:1.7;">
+            """,
+            unsafe_allow_html=True
+        )
+        st.markdown(md_content)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    # ── Instructions d'utilisation ───────────────────────────────────────────
+    st.markdown("---")
+    st.markdown("### 💡 Comment utiliser ce prompt ?")
+    st.info(
+        "1. **Téléchargez** le prompt ci-dessus (`.md` ou `.pdf`)\n"
+        "2. **Ouvrez** votre IA préférée (Claude, ChatGPT, Gemini…)\n"
+        "3. **Copiez-collez** le prompt, puis **joignez** votre document source (PDF du CV ou de la fiche de poste)\n"
+        "4. **Récupérez** le JSON/YAML généré par l'IA\n"
+        "5. **Uploadez** ce fichier dans le **Générateur Batch** pour produire votre document Word ✅"
+    )
 
 
 if __name__ == "__main__":
