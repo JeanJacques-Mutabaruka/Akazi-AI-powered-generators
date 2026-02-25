@@ -371,92 +371,146 @@ def _render_zone_editor(part: str, zone: str):
 
 def _render_section_options(part: str):
     """
-    Expander "Options avancées" pour une section header ou footer.
-    Gère :
-      - _col_widths   : proportions L / C / R (ex. [2, 1, 2])
-      - _top_line     : ligne horizontale au-dessus du tableau
-      - _bottom_line  : ligne horizontale en-dessous du tableau
-      - _distance_cm  : distance du bord de page (header_distance / footer_distance)
+    Options avancées pour une section header ou footer.
+    Version sans expander imbriqué (compatible Streamlit Cloud).
     """
     cfg_part = _cfg().get(part, {})
     kp = f"opts_{part}"
 
-    with st.expander("⚙️ Options avancées de la section", expanded=False):
-        st.markdown("**📐 Largeurs de colonnes** *(proportions relatives L / C / R)*")
-        col_widths = cfg_part.get("_col_widths", [1, 1, 1])
-        # S'assurer qu'on a bien 3 valeurs
-        while len(col_widths) < 3:
-            col_widths.append(1)
+    # Toggle au lieu d'un expander imbriqué
+    show_opts = st.toggle(
+        f"⚙️ Options avancées ({part.upper()})",
+        value=False,
+        key=f"{kp}_toggle"
+    )
 
-        c1, c2, c3, c4 = st.columns([2, 2, 2, 3])
-        w_left   = c1.number_input("Gauche",  value=float(col_widths[0]), min_value=0.1, max_value=10.0, step=0.5, key=f"{kp}_cl")
-        w_center = c2.number_input("Centre",  value=float(col_widths[1]), min_value=0.1, max_value=10.0, step=0.5, key=f"{kp}_cc")
-        w_right  = c3.number_input("Droite",  value=float(col_widths[2]), min_value=0.1, max_value=10.0, step=0.5, key=f"{kp}_cr")
-        total = w_left + w_center + w_right
-        with c4:
-            pct_l = int(round(w_left   / total * 100))
-            pct_c = int(round(w_center / total * 100))
-            pct_r = 100 - pct_l - pct_c
-            st.markdown("<br>", unsafe_allow_html=True)
-            st.caption(f"→ {pct_l}% / {pct_c}% / {pct_r}%")
+    if not show_opts:
+        return
 
-        new_widths = [round(w_left, 2), round(w_center, 2), round(w_right, 2)]
-        # Toujours conserver — ne pas supprimer quand [1,1,1]
-        _cfg()[part]["_col_widths"] = new_widths
+    st.markdown("---")
 
-        st.markdown("---")
+    # ── Largeurs de colonnes ───────────────────────────────────────────
+    st.markdown("**📐 Largeurs de colonnes** *(proportions relatives L / C / R)*")
 
-        # ── Ligne horizontale full-width ──────────────────────────────────
-        st.markdown("**─ Lignes horizontales** *(couvrent toute la largeur)*")
+    col_widths = cfg_part.get("_col_widths", [1, 1, 1])
+    while len(col_widths) < 3:
+        col_widths.append(1)
 
-        col_top, col_bot = st.columns(2)
+    c1, c2, c3, c4 = st.columns([2, 2, 2, 3])
+    w_left   = c1.number_input("Gauche",  value=float(col_widths[0]), min_value=0.1, max_value=10.0, step=0.5, key=f"{kp}_cl")
+    w_center = c2.number_input("Centre",  value=float(col_widths[1]), min_value=0.1, max_value=10.0, step=0.5, key=f"{kp}_cc")
+    w_right  = c3.number_input("Droite",  value=float(col_widths[2]), min_value=0.1, max_value=10.0, step=0.5, key=f"{kp}_cr")
 
-        # Ligne du dessus
-        with col_top:
-            st.markdown("**↑ Au-dessus du tableau**")
-            top_line = cfg_part.get("_top_line", {})
-            enable_top = st.checkbox("Activer", value=bool(top_line), key=f"{kp}_top_on")
-            if enable_top:
-                ct1, ct2 = st.columns(2)
-                top_thick = ct1.number_input("Épaisseur (pt)", value=float(top_line.get("thickness_pt", 1.0)), min_value=0.25, max_value=10.0, step=0.25, key=f"{kp}_top_thick")
-                top_color = ct2.text_input("Couleur hex",      value=top_line.get("color", "000000"), key=f"{kp}_top_color")
-                _cfg()[part]["_top_line"] = {"thickness_pt": top_thick, "color": top_color}
-                st.markdown(f"<hr class='line-preview' style='border-color:#{top_color}; border-top-width:{top_thick}pt;'>", unsafe_allow_html=True)
-            else:
-                _cfg()[part].pop("_top_line", None)
+    total = w_left + w_center + w_right
+    with c4:
+        pct_l = int(round(w_left   / total * 100))
+        pct_c = int(round(w_center / total * 100))
+        pct_r = 100 - pct_l - pct_c
+        st.markdown("<br>", unsafe_allow_html=True)
+        st.caption(f"→ {pct_l}% / {pct_c}% / {pct_r}%")
 
-        # Ligne du dessous
-        with col_bot:
-            st.markdown("**↓ En-dessous du tableau**")
-            bot_line = cfg_part.get("_bottom_line", {})
-            enable_bot = st.checkbox("Activer", value=bool(bot_line), key=f"{kp}_bot_on")
-            if enable_bot:
-                cb1, cb2 = st.columns(2)
-                bot_thick = cb1.number_input("Épaisseur (pt)", value=float(bot_line.get("thickness_pt", 1.0)), min_value=0.25, max_value=10.0, step=0.25, key=f"{kp}_bot_thick")
-                bot_color = cb2.text_input("Couleur hex",      value=bot_line.get("color", "000000"), key=f"{kp}_bot_color")
-                _cfg()[part]["_bottom_line"] = {"thickness_pt": bot_thick, "color": bot_color}
-                st.markdown(f"<hr class='line-preview' style='border-color:#{bot_color}; border-top-width:{bot_thick}pt;'>", unsafe_allow_html=True)
-            else:
-                _cfg()[part].pop("_bottom_line", None)
+    _cfg()[part]["_col_widths"] = [
+        round(w_left, 2),
+        round(w_center, 2),
+        round(w_right, 2)
+    ]
 
-        st.markdown("---")
+    st.markdown("---")
 
-        # ── Distance du bord de page ──────────────────────────────────────
-        st.markdown("**📏 Distance du bord de page** *(en cm)*")
-        dist_key    = "_distance_cm"
-        cur_dist    = cfg_part.get(dist_key, 1.25)
-        new_dist    = st.number_input(
-            "Distance (cm)", value=float(cur_dist),
-            min_value=0.0, max_value=5.0, step=0.25,
-            key=f"{kp}_dist",
-            help="Correspond à header_distance / footer_distance dans Word. 0 = valeur par défaut Word."
-        )
-        if new_dist > 0:
-            _cfg()[part][dist_key] = round(new_dist, 2)
+    # ── Lignes horizontales full-width ──────────────────────────────────
+    st.markdown("**─ Lignes horizontales** *(couvrent toute la largeur)*")
+
+    col_top, col_bot = st.columns(2)
+
+    # Ligne du dessus
+    with col_top:
+        st.markdown("**↑ Au-dessus du tableau**")
+        top_line = cfg_part.get("_top_line", {})
+        enable_top = st.checkbox("Activer", value=bool(top_line), key=f"{kp}_top_on")
+
+        if enable_top:
+            ct1, ct2 = st.columns(2)
+            top_thick = ct1.number_input(
+                "Épaisseur (pt)",
+                value=float(top_line.get("thickness_pt", 1.0)),
+                min_value=0.25,
+                max_value=10.0,
+                step=0.25,
+                key=f"{kp}_top_thick"
+            )
+            top_color = ct2.text_input(
+                "Couleur hex",
+                value=top_line.get("color", "000000"),
+                key=f"{kp}_top_color"
+            )
+
+            _cfg()[part]["_top_line"] = {
+                "thickness_pt": top_thick,
+                "color": top_color
+            }
+
+            st.markdown(
+                f"<hr class='line-preview' style='border-color:#{top_color}; border-top-width:{top_thick}pt;'>",
+                unsafe_allow_html=True
+            )
         else:
-            _cfg()[part].pop(dist_key, None)
+            _cfg()[part].pop("_top_line", None)
 
+    # Ligne du dessous
+    with col_bot:
+        st.markdown("**↓ En-dessous du tableau**")
+        bot_line = cfg_part.get("_bottom_line", {})
+        enable_bot = st.checkbox("Activer", value=bool(bot_line), key=f"{kp}_bot_on")
 
+        if enable_bot:
+            cb1, cb2 = st.columns(2)
+            bot_thick = cb1.number_input(
+                "Épaisseur (pt)",
+                value=float(bot_line.get("thickness_pt", 1.0)),
+                min_value=0.25,
+                max_value=10.0,
+                step=0.25,
+                key=f"{kp}_bot_thick"
+            )
+            bot_color = cb2.text_input(
+                "Couleur hex",
+                value=bot_line.get("color", "000000"),
+                key=f"{kp}_bot_color"
+            )
+
+            _cfg()[part]["_bottom_line"] = {
+                "thickness_pt": bot_thick,
+                "color": bot_color
+            }
+
+            st.markdown(
+                f"<hr class='line-preview' style='border-color:#{bot_color}; border-top-width:{bot_thick}pt;'>",
+                unsafe_allow_html=True
+            )
+        else:
+            _cfg()[part].pop("_bottom_line", None)
+
+    st.markdown("---")
+
+    # ── Distance du bord de page ───────────────────────────────────────
+    st.markdown("**📏 Distance du bord de page** *(en cm)*")
+
+    cur_dist = cfg_part.get("_distance_cm", 1.25)
+
+    new_dist = st.number_input(
+        "Distance (cm)",
+        value=float(cur_dist),
+        min_value=0.0,
+        max_value=5.0,
+        step=0.25,
+        key=f"{kp}_dist",
+        help="Correspond à header_distance / footer_distance dans Word. 0 = valeur par défaut Word."
+    )
+
+    if new_dist > 0:
+        _cfg()[part]["_distance_cm"] = round(new_dist, 2)
+    else:
+        _cfg()[part].pop("_distance_cm", None)
 # ═════════════════════════════════════════════════════════════════════════
 # CONSTRUCTION DU YAML PROPRE POUR PREVIEW / SAUVEGARDE
 # ═════════════════════════════════════════════════════════════════════════
