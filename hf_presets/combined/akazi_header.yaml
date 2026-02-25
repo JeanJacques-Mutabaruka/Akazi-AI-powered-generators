@@ -1,0 +1,64 @@
+# ============================================================
+# docx_header_engine v2 - Config YAML exemple (format AKAZI)
+# ============================================================
+
+header:
+  left:
+    - type: image
+      path: assets/logo_akazi.png
+      width_cm: 3.5
+
+  right:
+    - type: text
+      value: "AKAZI Consulting"
+      style:
+        font: Calibri
+        size: 10
+        bold: true
+        color: "1F4E79"
+        align: right
+
+footer:
+  left:
+    - type: text
+      value: "Confidentiel — Usage strictement interne"
+      style:
+        font: Calibri
+        size: 8
+        italic: true
+        color: "808080"
+
+  center:
+    - type: horizontal_line
+      thickness_pt: 0.5
+      color: "1F4E79"
+
+  right:
+    - type: inline_group
+      align: right
+      style:
+        font: Calibri
+        size: 9
+        color: "808080"
+      items:
+        - type: text
+          value: "Page "
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: " / "
+        - type: field
+          value: " NUMPAGES "
+
+---
+# ============================================================
+# Exemple avec first_page différent (page de garde sans header)
+# ============================================================
+
+# header_first:  {}   # vide = pas de header sur page 1
+
+# header:
+#   left:
+#     - type: image
+#       path: logo.png
+#       width_cm: 3.0

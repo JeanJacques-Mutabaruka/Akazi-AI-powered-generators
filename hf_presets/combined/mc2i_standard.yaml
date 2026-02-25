@@ -1,0 +1,75 @@
+# ============================================================
+# Preset Header/Footer — MC2I Standard (sans données dynamiques)
+# Compatible avec HeaderFooterEngine.apply_yaml()
+# ============================================================
+# USAGE : Ce preset est une version STATIQUE du layout MC2I.
+# Pour les données dynamiques (initiales, titre, années d'expérience),
+# laissez hf_preset vide → MC2ILayoutManager sera utilisé automatiquement.
+# ============================================================
+# Header : Logo MC2I flottant (gauche) | "Confidentiel" (droite)
+# Footer : Contact MC2I (gauche) | Pagination (droite)
+# ============================================================
+
+header:
+  left:
+    - type: floating_image
+      path: Assets/images/MC2i_logo_header.jpg
+      width_cm: 4.6
+      height_cm: 2.88
+      x_cm: 14.0
+      y_cm: -0.8
+      wrap: none
+
+  center: []
+
+  right:
+    - type: text
+      value: "Confidentiel"
+      style:
+        font: Lato
+        size: 8
+        italic: true
+        color: "999999"
+        align: right
+
+footer:
+  left:
+    - type: text
+      value: "mc2i — Cabinet de conseil en transformation digitale"
+      style:
+        font: Lato
+        size: 8
+        color: "333333"
+
+  center: []
+
+  right:
+    - type: inline_group
+      align: right
+      style:
+        font: Lato
+        size: 8
+        color: "333333"
+      items:
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: " / "
+        - type: field
+          value: " NUMPAGES "
+
+# ── Première page : header vide, footer contact ──────────────────────────
+header_first:
+  left: []
+  center: []
+  right: []
+
+footer_first:
+  center:
+    - type: text
+      value: "mc2i.fr  |  contact@mc2i.fr  |  01 44 54 30 00"
+      style:
+        font: Lato
+        size: 8
+        color: "666666"
+        align: center

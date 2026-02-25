@@ -1,0 +1,25 @@
+# ============================================================
+# Preset Footer uniquement — Numéro de page
+# ============================================================
+# Footer minimaliste : numéro de page centré
+# Idéal pour les documents internes sans branding
+
+footer:
+  left: []
+  center:
+    - type: inline_group
+      align: center
+      style:
+        font: Calibri
+        size: 9
+        color: "808080"
+      items:
+        - type: text
+          value: "Page "
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: " / "
+        - type: field
+          value: " NUMPAGES "
+  right: []

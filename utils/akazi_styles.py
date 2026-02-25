@@ -193,43 +193,48 @@ class AkaziStyleManager:
 
     def _create_akazi_numbering(self):
         """
-        Crée une numérotation custom AKAZI :
-        Level 0 = ●
-        Level 1 = °
+        Crée une numérotation custom AKAZI avec 5 niveaux de bullets diversifiés :
+        Level 0 = • (U+2022 bullet)          — rond plein
+        Level 1 = ◦ (U+25E6 white bullet)    — rond vide
+        Level 2 = ▪ (U+25AA small square)    — carré plein
+        Level 3 = ▫ (U+25AB white square)    — carré vide
+        Level 4 = ‣ (U+2023 triangular)      — triangle
         """
-
         numbering = self.doc.part.numbering_part.numbering_definitions._numbering
 
         abstract_num = OxmlElement('w:abstractNum')
         abstract_num.set(qn('w:abstractNumId'), '99')
 
-        # ============ LEVEL 0 (●) ============
-        lvl0 = OxmlElement('w:lvl')
-        lvl0.set(qn('w:ilvl'), '0')
+        # Définition des 5 niveaux de bullets
+        bullet_chars = [
+            '•',  # Level 0 — U+2022 bullet (rond plein)
+            '◦',  # Level 1 — U+25E6 white bullet (rond vide)
+            '▪',  # Level 2 — U+25AA small black square (carré plein)
+            '▫',  # Level 3 — U+25AB white small square (carré vide)
+            '‣',  # Level 4 — U+2023 triangular bullet (triangle)
+        ]
 
-        numFmt = OxmlElement('w:numFmt')
-        numFmt.set(qn('w:val'), 'bullet')
-        lvl0.append(numFmt)
+        for level, char in enumerate(bullet_chars):
+            lvl = OxmlElement('w:lvl')
+            lvl.set(qn('w:ilvl'), str(level))
 
-        lvlText = OxmlElement('w:lvlText')
-        lvlText.set(qn('w:val'), '•')
-        lvl0.append(lvlText)
+            numFmt = OxmlElement('w:numFmt')
+            numFmt.set(qn('w:val'), 'bullet')
+            lvl.append(numFmt)
 
-        abstract_num.append(lvl0)
+            lvlText = OxmlElement('w:lvlText')
+            lvlText.set(qn('w:val'), char)
+            lvl.append(lvlText)
 
-        # ============ LEVEL 1 (°) ============
-        lvl1 = OxmlElement('w:lvl')
-        lvl1.set(qn('w:ilvl'), '1')
+            # Indentation progressive par niveau
+            pPr = OxmlElement('w:pPr')
+            ind = OxmlElement('w:ind')
+            ind.set(qn('w:left'), str(720 + level * 360))   # 0.5" + 0.25" par niveau
+            ind.set(qn('w:hanging'), '360')                  # 0.25" hanging
+            pPr.append(ind)
+            lvl.append(pPr)
 
-        numFmt1 = OxmlElement('w:numFmt')
-        numFmt1.set(qn('w:val'), 'bullet')
-        lvl1.append(numFmt1)
-
-        lvlText1 = OxmlElement('w:lvlText')
-        lvlText1.set(qn('w:val'), '°')
-        lvl1.append(lvlText1)
-
-        abstract_num.append(lvl1)
+            abstract_num.append(lvl)
 
         numbering.append(abstract_num)
 
@@ -242,3 +247,4 @@ class AkaziStyleManager:
 
         num.append(abstractNumId)
         numbering.append(num)
+

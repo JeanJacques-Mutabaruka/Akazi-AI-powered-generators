@@ -1,0 +1,64 @@
+# ============================================================
+# docx_header_engine v2 - Config YAML exemple (format MC2I)
+# ============================================================
+# MC2I utilise un logo flottant en position absolue (Feature 2)
+# et une première page différente (Feature 3)
+
+# --- Toutes les pages sauf la première ---
+header:
+  left:
+    - type: floating_image
+      path: assets/logo_mc2i.png
+      width_cm: 3.2
+      height_cm: 1.1
+      x_cm: 1.27    # marge gauche exacte
+      y_cm: 0.5
+      wrap: none
+
+  right:
+    - type: text
+      value: "Confidentiel"
+      style:
+        font: Arial
+        size: 8
+        italic: true
+        color: "999999"
+        align: right
+
+footer:
+  left:
+    - type: text
+      value: "MC2I — Cabinet de conseil"
+      style:
+        font: Arial
+        size: 8
+        color: "333333"
+
+  right:
+    - type: inline_group
+      align: right
+      style:
+        font: Arial
+        size: 8
+        color: "333333"
+      items:
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: " / "
+        - type: field
+          value: " NUMPAGES "
+
+# --- Première page: header vide, footer avec contact ---
+header_first:
+  left: []
+
+footer_first:
+  center:
+    - type: text
+      value: "mc2i.fr  |  contact@mc2i.fr  |  01 44 54 30 00"
+      style:
+        font: Arial
+        size: 8
+        color: "666666"
+        align: center

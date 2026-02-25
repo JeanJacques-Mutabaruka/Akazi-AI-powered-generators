@@ -1,0 +1,56 @@
+# ============================================================
+# Preset Header/Footer — AKAZI Standard
+# Compatible avec HeaderFooterEngine.apply_yaml()
+# ============================================================
+# Header : Logo AKAZI centré + tagline
+# Footer : Adresse société (gauche) | Pagination (droite)
+# ============================================================
+
+header:
+  left:
+    - type: image
+      path: Assets/images/Akazi_logo_small.jpg
+      width_cm: 2.7
+      height_cm: 1.4
+
+  center:
+    - type: text
+      value: "Vos consultants, de A à Z"
+      style:
+        font: Calibri
+        size: 11
+        bold: true
+        color: "002060"
+        align: center
+
+  right: []
+
+footer:
+  left:
+    - type: text
+      value: "Société AKAZI, SAS – 60 Rue François 1er 75008 Paris"
+      style:
+        font: Calibri
+        size: 8
+        bold: true
+        color: "002060"
+
+  center: []
+
+  right:
+    - type: inline_group
+      align: right
+      style:
+        font: Calibri
+        size: 8
+        bold: true
+        color: "002060"
+      items:
+        - type: text
+          value: "Page "
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: " de "
+        - type: field
+          value: " NUMPAGES "

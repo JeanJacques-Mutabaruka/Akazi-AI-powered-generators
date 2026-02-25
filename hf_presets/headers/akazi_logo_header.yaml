@@ -1,0 +1,22 @@
+# ============================================================
+# Preset Header uniquement — AKAZI avec logo
+# ============================================================
+
+header:
+  left:
+    - type: image
+      path: Assets/images/Akazi_logo_small.jpg
+      width_cm: 2.7
+      height_cm: 1.4
+
+  center:
+    - type: text
+      value: "Vos consultants, de A à Z"
+      style:
+        font: Calibri
+        size: 11
+        bold: true
+        color: "002060"
+        align: center
+
+  right: []

@@ -18,6 +18,11 @@ ENV/
 **/examples/
 **/Examples/
 
+**/tests/
+**/Tests/
+
+**/z_documentation/
+
 # ── Python cache ──────────────────────────────────────────
 __pycache__/
 *.py[cod]
