@@ -633,27 +633,67 @@ with tab_builder:
     _ensure_zones()
 
     # ── HEADER expander ───────────────────────────────────────────────────
-    with st.expander("🔝  **HEADER**", expanded=True):
-        # Options avancées en haut
-        _render_section_options("header")
-        st.markdown("<br>", unsafe_allow_html=True)
-        # Colonnes de zones
-        col_hl, col_hc, col_hr = st.columns(3)
-        with col_hl: _render_zone_editor("header", "left")
-        with col_hc: _render_zone_editor("header", "center")
-        with col_hr: _render_zone_editor("header", "right")
+    # ════════════════════════════════════════════════════════════════════════
+    # HEADER
+    # ════════════════════════════════════════════════════════════════════════
+
+    st.markdown("""
+    <div style='background:#fce4ec;
+                padding:14px 18px;
+                border-radius:10px;
+                border-left:6px solid #c62828;
+                margin-bottom:18px;'>
+        <h2 style='margin:0;color:#c62828;'>🔝 HEADER</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    _render_section_options("header")
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # ── FOOTER expander ───────────────────────────────────────────────────
-    with st.expander("🔻  **FOOTER**", expanded=True):
-        _render_section_options("footer")
-        st.markdown("<br>", unsafe_allow_html=True)
-        col_fl, col_fc, col_fr = st.columns(3)
-        with col_fl: _render_zone_editor("footer", "left")
-        with col_fc: _render_zone_editor("footer", "center")
-        with col_fr: _render_zone_editor("footer", "right")
+    col_hl, col_hc, col_hr = st.columns(3)
 
+    with col_hl:
+        _render_zone_editor("header", "left")
+
+    with col_hc:
+        _render_zone_editor("header", "center")
+
+    with col_hr:
+        _render_zone_editor("header", "right")
+
+
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+
+    # ════════════════════════════════════════════════════════════════════════
+    # FOOTER
+    # ════════════════════════════════════════════════════════════════════════
+
+    st.markdown("""
+    <div style='background:#e8f5e9;
+                padding:14px 18px;
+                border-radius:10px;
+                border-left:6px solid #2e7d32;
+                margin-bottom:18px;'>
+        <h2 style='margin:0;color:#2e7d32;'>🔻 FOOTER</h2>
+    </div>
+    """, unsafe_allow_html=True)
+
+    _render_section_options("footer")
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    col_fl, col_fc, col_fr = st.columns(3)
+
+    with col_fl:
+        _render_zone_editor("footer", "left")
+
+    with col_fc:
+        _render_zone_editor("footer", "center")
+
+    with col_fr:
+        _render_zone_editor("footer", "right")
     # ── Aperçu YAML + Sauvegarde ───────────────────────────────────────────
     st.markdown("---")
     col_yaml, col_save = st.columns([3, 2])
