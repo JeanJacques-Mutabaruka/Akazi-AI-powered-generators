@@ -1,0 +1,83 @@
+header:
+  _col_widths:
+  - 9.0
+  - 0.2
+  - 0.5
+  _distance_cm: 0.5
+  left:
+  - type: text
+    align: left
+    style:
+      font: Lato
+      size: 16
+      color: 006A9E
+      align: left
+      bold: true
+    items:
+    - type: text
+      value: '{{consultant_initials}}'
+      style:
+        bold: true
+    - type: text
+      value: '
+
+        {{title}} – ({{years}} années d''expérience)'
+      style:
+        bold: false
+    path: C:\CONVERGENCIUM\AKAZI\Akazi-jobs-App\akazi-generator-v2.0-complete\akazi-generator-complete\Assets\images\Akazi_logo_small.jpg
+    width_cm: 2.7
+    height_cm: 1.4
+    value: '{{consultant_initials}}
+
+      {{main_domain}} - {{years}} ans d''expérience'
+  right:
+  - type: floating_image
+    path: C:\CONVERGENCIUM\AKAZI\Akazi-jobs-App\akazi-generator-v2.0-complete\akazi-generator-complete\Assets\images\MC2i_logo_header.jpg
+    width_cm: 4.6
+    height_cm: 2.88
+    x_cm: 15.5
+    y_cm: 0.1
+    wrap: none
+    behind_text: true
+    value: ' PAGE '
+footer:
+  _col_widths:
+  - 9.5
+  - 1.5
+  - 0.1
+  _distance_cm: 0.5
+  left:
+  - type: text
+    value: 'BENJAMIN DUPUY – benjamin.dupuy@mc2i.fr
+
+      51 Rue François 1er – 75008 PARIS - 01.44.43.01.00 – www.mc2i.fr'
+    style:
+      size: 8
+      color: '002060'
+      align: left
+      bold: true
+      font: Calibri
+  center:
+  - type: inline_group
+    value: ''
+    align: right
+    style:
+      font: Lato
+      size: 10
+      color: 0070C0
+    items:
+    - type: field
+      value: PAGE
+    - type: text
+      value: /
+    - type: field
+      value: ' NUMPAGES '
+  - type: floating_image
+    value: ' PAGE '
+    path: C:\CONVERGENCIUM\AKAZI\Akazi-jobs-App\akazi-generator-v2.0-complete\akazi-generator-complete\Assets\images\MC2i_image_footer_Right_02.jpg
+    width_cm: 2.5
+    height_cm: 2.5
+    x_cm: 18.0
+    y_cm: 24.0
+    wrap: none
+    behind_text: true

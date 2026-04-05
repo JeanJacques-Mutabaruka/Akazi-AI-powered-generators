@@ -90,6 +90,11 @@ class ZoneManager:
                 usable_dxa=usable_dxa
             )
 
+        # Forcer spacing before=0 / after=0 sur TOUS les paragraphes directs
+        # du container — appelé EN DERNIER pour couvrir aussi les paragraphes
+        # créés par render() et _add_full_width_line()
+        self._zero_spacing_paragraphs()
+
     # ------------------------------------------------------------------
     # Ligne horizontale full-width via table 1x1
     # ------------------------------------------------------------------
@@ -141,6 +146,42 @@ class ZoneManager:
         p_elem.append(r)
 
         self.container._element.append(p_elem)
+
+    # ------------------------------------------------------------------
+    # Spacing zéro sur paragraphes orphelins (Point 2c)
+    # ------------------------------------------------------------------
+
+    def _zero_spacing_paragraphs(self):
+        """
+        Parcourt tous les <w:p> directs du container header/footer
+        (hors cellules de table) et force w:spacing before=0 / after=0.
+
+        Python-docx crée automatiquement un paragraphe vide après chaque
+        table insérée dans un header/footer. Ce paragraphe hérite du style
+        Normal du document (space_before/after non nuls), ce qui crée un
+        espace vertical indésirable. Cette méthode neutralise cet espace.
+
+        Seuls les <w:p> directs sont traités — les paragraphes à l'intérieur
+        des cellules (rendus par les éléments) ne sont pas touchés.
+        """
+        W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+        body = self.container._element
+        for child in body:
+            tag = child.tag.split("}")[-1] if "}" in child.tag else child.tag
+            if tag != "p":
+                continue
+            # Récupérer ou créer pPr
+            pPr = child.find(f"{{{W_NS}}}pPr")
+            if pPr is None:
+                pPr = OxmlElement("w:pPr")
+                child.insert(0, pPr)
+            # Forcer spacing before=0 / after=0
+            spacing = pPr.find(f"{{{W_NS}}}spacing")
+            if spacing is None:
+                spacing = OxmlElement("w:spacing")
+                pPr.append(spacing)
+            spacing.set(qn("w:before"), "0")
+            spacing.set(qn("w:after"),  "0")
 
     # ------------------------------------------------------------------
     # Fix largeurs : tblW + tblGrid + tcW en dxa

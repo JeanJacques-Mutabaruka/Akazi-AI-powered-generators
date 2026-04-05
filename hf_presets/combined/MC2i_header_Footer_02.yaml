@@ -1,0 +1,69 @@
+header:
+  _col_widths:
+  - 9.0
+  - 0.2
+  - 0.5
+  _distance_cm: 0.5
+  left:
+  - type: text
+    value: '{{consultant_initials}}
+
+      {{main_domain_expertise}} - {{years_experience}} ans d''expérience'
+    style:
+      font: Lato
+      size: 16
+      color: 006A9E
+      align: left
+      bold: true
+    align: left
+  right:
+  - type: floating_image
+    path: C:\CONVERGENCIUM\AKAZI\Akazi-jobs-App\akazi-generator-v2.0-complete\akazi-generator-complete\Assets\images\MC2i_logo_header.jpg
+    width_cm: 4.6
+    height_cm: 2.88
+    x_cm: 15.5
+    y_cm: 0.1
+    wrap: none
+    behind_text: true
+    value: ' PAGE '
+footer:
+  _col_widths:
+  - 9.5
+  - 1.5
+  - 0.1
+  _distance_cm: 0.5
+  left:
+  - type: text
+    value: '{{agency_representative}}
+
+      {{agency_address}} -- {{agency_representative_email}}'
+    style:
+      size: 8
+      color: 0070C0
+      align: left
+      bold: true
+      font: Lato
+  center:
+  - type: inline_group
+    items:
+    - type: field
+      value: PAGE
+    - type: text
+      value: /
+    - type: field
+      value: ' NUMPAGES '
+    align: right
+    style:
+      font: Lato
+      size: 10
+      color: 0070C0
+    value: ''
+  - type: floating_image
+    path: C:\CONVERGENCIUM\AKAZI\Akazi-jobs-App\akazi-generator-v2.0-complete\akazi-generator-complete\Assets\images\MC2i_image_footer_Right_02.jpg
+    width_cm: 2.5
+    height_cm: 2.5
+    x_cm: 18.0
+    y_cm: 24.0
+    wrap: none
+    behind_text: true
+    value: ' PAGE '

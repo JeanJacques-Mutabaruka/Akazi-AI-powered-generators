@@ -1,0 +1,180 @@
+# ==============================================================================
+# Preset Header/Footer — MC2I CV Complet
+# Compatible HeaderFooterEngine.apply_yaml_with_vars()
+# ==============================================================================
+#
+# Variables dynamiques (résolues depuis le JSON du CV au moment de la génération) :
+#   {{consultant_initials}}   ← document_metadata.consultant_initials   ex: "NKA"
+#   {{years_experience}}      ← calculé depuis experience_summary        ex: "12"
+#   {{main_domain_expertise}} ← introduction.conclusion.main_domain      ex: "Big Data et Cloud"
+#
+# Données statiques (configurées via HF Builder, stockées dans ce YAML) :
+#   Footer ligne 1 : Nom représentant + email agence
+#   Footer ligne 2 : Adresse agence complète
+#
+# Pour modifier le footer statique :
+#   → Ouvrir ce preset dans le HF Builder → éditer les valeurs text → Sauvegarder
+# ==============================================================================
+
+# ── OPTIONS GLOBALES ──────────────────────────────────────────────────────────
+_col_widths: [3, 1, 2]   # proportions colonnes left / center / right
+
+
+# ── HEADER (toutes pages sauf première) ──────────────────────────────────────
+header:
+  _distance_cm: 0.5
+  _bottom_line:
+    thickness_pt: 1.5
+    color: "DD0061"       # Rose MC2I corporate
+
+  left:
+    - type: inline_group
+      align: left
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"   # Bleu MC2I
+      items:
+        - type: text
+          value: "{{consultant_initials}}"
+          style:
+            bold: true
+        - type: text
+          value: "\n{{consultant_initials}} – ({{years_experience}} années d'expérience)"
+          style:
+            bold: false
+
+  center: []
+
+  right:
+    - type: floating_image
+      path: "Assets/images/MC2i_logo_header.jpg"
+      width_cm: 4.6
+      height_cm: 2.88
+      x_cm: 14.0
+      y_cm: -0.8
+      wrap: none
+
+
+# ── FOOTER (toutes pages) ─────────────────────────────────────────────────────
+footer:
+  _distance_cm: 1.0
+
+  left:
+    - type: text
+      value: "BENJAMIN DUPUY – benjamin.dupuy@mc2i.fr"
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+    - type: text
+      value: "51 Rue François 1er – 75008 PARIS - 01.44.43.01.00 – www.mc2i.fr"
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+
+  center: []
+
+  right:
+    - type: floating_image
+      path: "Assets/images/MC2i_image_footer_Right.jpg"
+      width_cm: 3.37
+      height_cm: 7.96
+      x_cm: 15.25
+      y_cm: -6.5
+      wrap: none
+    - type: inline_group
+      align: right
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+      items:
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: "/"
+        - type: field
+          value: " NUMPAGES "
+
+
+# ── HEADER PREMIÈRE PAGE ──────────────────────────────────────────────────────
+# Même contenu que le header standard (pas de première page différente pour MC2I CV)
+header_first:
+  _distance_cm: 0.5
+  _bottom_line:
+    thickness_pt: 1.5
+    color: "DD0061"
+
+  left:
+    - type: inline_group
+      align: left
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+      items:
+        - type: text
+          value: "{{consultant_initials}}"
+          style:
+            bold: true
+        - type: text
+          value: "\n{{consultant_initials}} – ({{years_experience}} années d'expérience)"
+          style:
+            bold: false
+
+  center: []
+
+  right:
+    - type: floating_image
+      path: "Assets/images/MC2i_logo_header.jpg"
+      width_cm: 4.6
+      height_cm: 2.88
+      x_cm: 14.0
+      y_cm: -0.8
+      wrap: none
+
+
+# ── FOOTER PREMIÈRE PAGE ──────────────────────────────────────────────────────
+# Identique au footer standard pour MC2I CV
+footer_first:
+  _distance_cm: 1.0
+
+  left:
+    - type: text
+      value: "BENJAMIN DUPUY – benjamin.dupuy@mc2i.fr"
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+    - type: text
+      value: "51 Rue François 1er – 75008 PARIS - 01.44.43.01.00 – www.mc2i.fr"
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+
+  center: []
+
+  right:
+    - type: floating_image
+      path: "Assets/images/MC2i_image_footer_Right.jpg"
+      width_cm: 3.37
+      height_cm: 7.96
+      x_cm: 15.25
+      y_cm: -6.5
+      wrap: none
+    - type: inline_group
+      align: right
+      style:
+        font: Lato
+        size: 10
+        color: "00669E"
+      items:
+        - type: field
+          value: " PAGE "
+        - type: text
+          value: "/"
+        - type: field
+          value: " NUMPAGES "
