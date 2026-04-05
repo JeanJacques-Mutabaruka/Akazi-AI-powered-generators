@@ -423,11 +423,11 @@ def _render_zone_editor(part: str, zone: str):
             _, cb_del = st.columns([11, 1])
             with cb_del:
                 if st.button("🗑️", key=uk(f"del_{part}_{zone}_{i}"),
-                             help="Supprimer", width='stretch'):
+                             help="Supprimer", use_container_width=True):
                     _delete_element(part, zone, i)
                     st.rerun()
             _update_element(part, zone, i, updated)
-    if st.button(f"＋ Ajouter dans {zone_name}", key=uk(f"add_{part}_{zone}"), width='stretch'):
+    if st.button(f"＋ Ajouter dans {zone_name}", key=uk(f"add_{part}_{zone}"), use_container_width=True):
         _add_element(part, zone)
         st.rerun()
 
@@ -773,7 +773,7 @@ with tab_builder:
             st.markdown("**📋 Partir d'un template**")
             sel_tmpl = st.selectbox("", list(TEMPLATES.keys()), key="template_select",
                                     label_visibility="collapsed")
-            if st.button("↩ Appliquer le template", key="apply_template", width='stretch'):
+            if st.button("↩ Appliquer le template", key="apply_template", use_container_width=True):
                 st.session_state.hf_config = copy.deepcopy(TEMPLATES[sel_tmpl])
                 st.session_state.active_preset_name = None
                 st.success(f"Template « {sel_tmpl} » appliqué !")
@@ -786,7 +786,7 @@ with tab_builder:
             preset_opts = get_preset_options("all")
             sel_preset  = st.selectbox("", list(preset_opts.keys()), key="load_preset_select",
                                        label_visibility="collapsed")
-            if st.button("↩ Charger ce preset", key="load_preset_btn", width='stretch'):
+            if st.button("↩ Charger ce preset", key="load_preset_btn", use_container_width=True):
                 ppath = preset_opts[sel_preset]
                 if ppath == "none":
                     set_config({
@@ -997,7 +997,7 @@ with tab_builder:
             data=yaml_str.encode("utf-8"),
             file_name="custom_hf_preset.yaml",
             mime="text/yaml",
-            width='stretch'
+            use_container_width=True
         )
 
     with col_save:
@@ -1005,7 +1005,7 @@ with tab_builder:
         preset_name = st.text_input("Nom du preset", value="mon_preset_custom", key="save_name")
         category    = st.selectbox("Catégorie", ["combined", "headers", "footers"], key="save_cat")
         overwrite   = st.checkbox("Écraser si existant", value=False, key="save_overwrite")
-        if st.button("💾 Sauvegarder", type="primary", width='stretch'):
+        if st.button("💾 Sauvegarder", type="primary", use_container_width=True):
             success, msg = save_preset(clean_cfg, preset_name, category, overwrite)
             if success:
                 st.success(f"✅ {msg}")
@@ -1138,7 +1138,7 @@ with tab_images:
             cols = st.columns(4)
             for i, img in enumerate(builtin):
                 with cols[i % 4]:
-                    try: st.image(img["path"], caption=img["name"], width='stretch')
+                    try: st.image(img["path"], caption=img["name"], use_container_width=True)
                     except: st.text(img["name"])
                     st.caption(f"`{Path(img['path']).name}`  ·  {img['size_kb']} KB")
         if user:
@@ -1146,7 +1146,7 @@ with tab_images:
             cols = st.columns(4)
             for i, img in enumerate(user):
                 with cols[i % 4]:
-                    try: st.image(img["path"], caption=img["name"], width='stretch')
+                    try: st.image(img["path"], caption=img["name"], use_container_width=True)
                     except: st.text(img["name"])
                     st.caption(f"`{Path(img['path']).name}`  ·  {img['size_kb']} KB")
 

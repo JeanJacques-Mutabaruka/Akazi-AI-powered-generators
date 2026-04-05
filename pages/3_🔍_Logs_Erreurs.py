@@ -145,7 +145,7 @@ def display_history_tab():
             display_cols.append(col)
     
     # Display table with filters
-    st.dataframe(df[display_cols] if display_cols else df, width='stretch', hide_index=True)
+    st.dataframe(df[display_cols] if display_cols else df, use_container_width=True, hide_index=True)
     
     # Export button
     csv_data = df.to_csv(index=False).encode('utf-8')

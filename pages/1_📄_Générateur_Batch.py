@@ -373,7 +373,7 @@ with col_up1:
     )
 with col_up2:
     st.markdown("<br>", unsafe_allow_html=True)
-    if st.button("🔄 Réinitialiser tout", width='stretch'):
+    if st.button("🔄 Réinitialiser tout", use_container_width=True):
         reset_all()
         st.rerun()
 st.markdown('</div>', unsafe_allow_html=True)
@@ -493,7 +493,7 @@ if uploaded_files:
             # Boutons sélection globale
             col_sa, col_da, _ = st.columns([1, 1, 4])
             with col_sa:
-                if st.button("☑️ Tout sélectionner", width='stretch'):
+                if st.button("☑️ Tout sélectionner", use_container_width=True):
                     for fi in st.session_state.files_data:
                         for fmt in fi['available_outputs']:
                             st.session_state.selections[
@@ -501,7 +501,7 @@ if uploaded_files:
                             ] = True
                     st.rerun()
             with col_da:
-                if st.button("☐ Tout déselectionner", width='stretch'):
+                if st.button("☐ Tout déselectionner", use_container_width=True):
                     st.session_state.selections = {}
                     st.rerun()
 
@@ -644,7 +644,7 @@ if uploaded_files:
                 if st.button(
                     f"🚀 Générer ({total_sel} sélectionné(s))",
                     disabled=(total_sel == 0 or not GENERATORS_AVAILABLE),
-                    width='stretch'
+                    use_container_width=True
                 ):
                     progress_bar = st.progress(0)
                     status_text  = st.empty()
@@ -787,7 +787,7 @@ if uploaded_files:
                 with col2:
                     if st.button(
                         "📦 Télécharger tout en ZIP",
-                        width='stretch'
+                        use_container_width=True
                     ):
                         zip_buf = io.BytesIO()
                         with zipfile.ZipFile(
@@ -802,7 +802,7 @@ if uploaded_files:
                             data=zip_buf.getvalue(),
                             file_name=f"Documents_AKAZI_{ts}.zip",
                             mime="application/zip",
-                            width='stretch'
+                            use_container_width=True
                         )
             else:
                 st.info("📭 Aucun document généré pour l'instant")

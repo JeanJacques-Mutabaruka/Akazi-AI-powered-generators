@@ -448,7 +448,7 @@ def display_prompts():
             data=md_content.encode("utf-8"),
             file_name=f"{stem}.md",
             mime="text/markdown",
-            width='stretch',
+            use_container_width=True,
             key=f"dl_md_{stem}"
         )
 
@@ -461,7 +461,7 @@ def display_prompts():
             data=pdf_or_html,
             file_name=f"{stem}.{'pdf' if is_pdf else 'html'}",
             mime="application/pdf" if is_pdf else "text/html",
-            width='stretch',
+            use_container_width=True,
             key=f"dl_pdf_{stem}"
         )
 

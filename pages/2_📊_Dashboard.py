@@ -121,7 +121,7 @@ def plot_documents_by_type(history: list):
     )
     
     fig.update_traces(textposition='inside', textinfo='percent+label')
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def plot_generation_times(history: list):
@@ -151,7 +151,7 @@ def plot_generation_times(history: list):
     )
     
     fig.update_layout(showlegend=False)
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def plot_generation_timeline(history: list):
@@ -187,7 +187,7 @@ def plot_generation_timeline(history: list):
         color_discrete_map={True: 'green', False: 'red'}
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def plot_error_distribution(errors: list):
@@ -218,7 +218,7 @@ def plot_error_distribution(errors: list):
         color_continuous_scale='Reds'
     )
     
-    st.plotly_chart(fig, width='stretch')
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def display_recent_activity(history: list):
@@ -253,7 +253,7 @@ def display_recent_activity(history: list):
         display_cols.append('time (s)')
     
     if display_cols:
-        st.dataframe(df[display_cols], width='stretch', hide_index=True)
+        st.dataframe(df[display_cols], use_container_width=True, hide_index=True)
     else:
         st.info("Colonnes de données insuffisantes")
 
