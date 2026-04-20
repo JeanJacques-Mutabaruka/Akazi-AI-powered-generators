@@ -1,5 +1,7 @@
 import os
 import copy
+import warnings
+from pathlib import Path
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Cm
@@ -15,9 +17,11 @@ class FloatingImageElement(BaseElement):
       (jamais dans une cellule de table), ce qui est requis par Word pour que
       behindDoc et la position absolue fonctionnent correctement.
     - Le paragraphe de la cellule reste vide (carrier neutre).
+    - Si l'image est introuvable : warning + <w:p> vide de fallback.
+      La cellule reste valide OOXML et le document s'ouvre sans erreur.
 
     Config:
-        path        : chemin vers l'image
+        path        : chemin vers l'image (absolu ou relatif à project_root)
         width_cm    : largeur en cm
         height_cm   : hauteur en cm (optionnel → proportionnel)
         x_cm        : distance depuis le bord GAUCHE de la page
@@ -52,15 +56,57 @@ class FloatingImageElement(BaseElement):
         self.wrap        = config.get("wrap", "none")
         self.behind_text = config.get("behind_text", False)
 
+    def _resolve_path(self) -> str | None:
+        """
+        Résout le chemin de l'image.
+
+        Stratégie :
+          1. Chemin tel quel (absolu ou relatif au CWD)
+          2. Relatif à la racine du projet (parent.parent de ce fichier)
+          3. Cherche uniquement le nom de fichier dans Assets/images/
+
+        Retourne le chemin résolu existant, ou None si introuvable.
+        """
+        if not self.path:
+            return None
+
+        p = Path(self.path)
+
+        # 1. Chemin tel quel
+        if p.exists():
+            return str(p)
+
+        # 2. Relatif à project_root
+        project_root = Path(__file__).resolve().parent.parent.parent
+        candidate = project_root / p
+        if candidate.exists():
+            return str(candidate)
+
+        # 3. Nom de fichier seul dans Assets/images/
+        filename = p.name
+        assets_candidate = project_root / "Assets" / "images" / filename
+        if assets_candidate.exists():
+            return str(assets_candidate)
+
+        return None
+
     def render(self, container):
         """
         Injecte l'anchor dans le BODY du header/footer (pas dans la cellule).
-        container peut être une cellule de table ou directement un header/footer.
+        Si l'image est introuvable : ajoute un <w:p> vide de fallback
+        et émet un warning — ne lève PAS d'exception pour ne pas corrompre
+        le XML OOXML (cellule sans <w:p> = "unreadable content" dans Word).
         """
-        if not self.path or not os.path.exists(self.path):
-            raise FileNotFoundError(
-                f"FloatingImageElement: image introuvable → {self.path}"
+        resolved = self._resolve_path()
+
+        if not resolved:
+            # Fallback : paragraphe vide pour que la cellule reste valide OOXML
+            container.add_paragraph()
+            warnings.warn(
+                f"[FloatingImageElement] Image introuvable, ignorée : {self.path}",
+                stacklevel=2
             )
+            return
 
         # Remonter jusqu'au body du header/footer (w:hdr ou w:ftr)
         hf_body = self._find_hf_body(container)
@@ -70,7 +116,7 @@ class FloatingImageElement(BaseElement):
         p_tmp = container.add_paragraph()
         pic_run = p_tmp.add_run()
         pic_run.add_picture(
-            self.path,
+            resolved,
             width=Cm(self.width_cm),
             height=Cm(self.height_cm) if self.height_cm else None
         )
@@ -90,7 +136,6 @@ class FloatingImageElement(BaseElement):
 
         # Injecter l'anchor dans le body du header/footer via un paragraphe dédié
         # Ce paragraphe est inséré EN PREMIER dans le hf_body (avant la table)
-        W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
         p_anchor = OxmlElement('w:p')
         r_anchor = OxmlElement('w:r')
         drawing  = OxmlElement('w:drawing')
